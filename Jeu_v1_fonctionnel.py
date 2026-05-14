@@ -34,20 +34,21 @@ def supprimer_accents(mot):
     mot_propre = "".join(c for c in forme_nfd if unicodedata.category(c) != 'Mn')
     return mot_propre
 
-def initialiser_mot_a_deviner():
-    mot_devine=["_"]*len(mot_complet)
-    return mot_devine
-
 #Cette fonction affiche le nombre de chances qu'il reste au joueur
 def afficher_chances(chances):
     print(f"Il vous reste {chances} chances.")
 
-def afficher_mot(mot_devine):
-    print(mot_devine)
-
-#Cette fonction affiche au joueur qu'il a gagné et le mot à deviner au complet
-def gagner_partie():
-    print(f"Bravo! Vous avez gagné. Le mot à deviner était {mot_complet}")
+#Cette fonction vérifie si le mot en cours d'être deviné est égal au mot à deviner et si oui indique au joueur qu'il a gagné
+def gagner_partie(mot_devine):
+    somme=0
+    for i in range (len(mot_complet)):
+        if mot_complet[i] == mot_devine[i]:
+            somme+=1
+    if somme== len(mot_complet):
+        print(f"Bravo! Vous avez gagné. Le mot à deviner était {mot_complet}")
+        return True
+    else:
+        return False
 
 #Cette fonction affiche au joueur qu'il a perdu et le mot qu'il cherchait à deviner
 def perdu_partie():
@@ -71,11 +72,28 @@ def fin_de_partie():
     else:
         exit()
 
-def entrer_lettre(mot_devine):
+"""Cette fonction demande au joueur d'entrer une lettre et vérifie qu'il s'agit bien d'une lettre et qu'elle est unique, 
+sinon elle boucle jusqu'à avoir une lettre valide"""
+def demander_lettre():
+    while True:
+        lettre = input("Entrez une lettre: ").lower()
+        if len(lettre)!=1:
+            print("Erreur: vous devez entrer une seule lettre")
+        elif not   lettre.isalpha():
+            print("Erreur: ce n'est pas une lettre valide")
+        else:
+            return lettre
+
+"""cette fonction vérifie si la lettre donnée par l'utilisateur se trouve dans le mot à deviner 
+la variable mot_devine enregistre cette lettre à son emplacement et indique au joueur qu'il a trouvé
+sinon elle indique au joueur que la lettre n'est pas dans le mot
+la fonction retourne un booléen selon si la lettre devinée était dans le mot (True) ou pas (False)
+"""
+def verifier_dans_le_mot(mot_devine):
     reponse = False
     global liste_lettres
     liste_lettres = []
-    lettre=str(input("Entrez une lettre: "))
+    lettre=demander_lettre()
     liste_lettres.append(lettre)
     for i in range (len(mot_complet)):
         if lettre==mot_complet[i]:
@@ -95,23 +113,24 @@ def jouer_pendu(chances=6):
     mot_initial = selectionner_mot(fichier)  # choisir un mot aléatoire parmi le fichier choisi
     global mot_complet
     mot_complet = supprimer_accents(mot_initial)
-    mot_devine = initialiser_mot_a_deviner()
+    mot_devine = ["_"]*len(mot_complet)
     afficher_chances(chances) #affiche le nombre de chances qu'il reste
     while chances > 0:
-        afficher_mot(mot_devine)
-        rep = entrer_lettre(mot_devine)
+        print(mot_devine)
+        rep = verifier_dans_le_mot(mot_devine)
+        gagne=gagner_partie(mot_devine)
+        if gagne:
+            fin_de_partie()
         if not rep:
             chances-=1
-        if mot_devine==mot_complet:
-            gagner_partie()
-            exit()
         if chances==1:
             donner_bonus()
         afficher_chances(chances)
     if chances==0:
         perdu_partie()
-    fin_de_partie()
+        fin_de_partie()
 
+#Lancement d'une partie de pendu
 jouer_pendu()
 
 
