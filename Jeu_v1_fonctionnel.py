@@ -17,7 +17,10 @@ Pour toute autre réponse, le code prendra le fichier de mots fourni sur Moodle
 def fournir_mots():
     rep=str(input("Voulez vous utiliser votre propre fichier texte ? oui ou non"))
     if rep== "oui":
-        fichier=str(input("Insérez l'adresse complète du fichier :"))
+        try:
+            fichier=input("Insérez l'adresse complète du fichier :")
+        except FileNotFoundError:
+            print("Veuillez entrer une adresse valide")
     else:
         fichier="set_de_mots_moodle.txt"
     return fichier
@@ -40,11 +43,7 @@ def afficher_chances(chances):
 
 #Cette fonction vérifie si le mot en cours d'être deviné est égal au mot à deviner et si oui indique au joueur qu'il a gagné
 def gagner_partie(mot_devine):
-    somme=0
-    for i in range (len(mot_complet)):
-        if mot_complet[i] == mot_devine[i]:
-            somme+=1
-    if somme== len(mot_complet):
+    if "_" not in mot_devine:
         print(f"Bravo! Vous avez gagné. Le mot à deviner était {mot_complet}")
         return True
     else:
@@ -88,12 +87,10 @@ def demander_lettre():
 la variable mot_devine enregistre cette lettre à son emplacement et indique au joueur qu'il a trouvé
 sinon elle indique au joueur que la lettre n'est pas dans le mot
 la fonction retourne un booléen selon si la lettre devinée était dans le mot (True) ou pas (False)
-Elle enregistre également les lettres données par le joueur pour le bonus
+Elle enregistre également les lettres données par le joueur pour que lors du bonus il affiche une lettre non essayée
 """
 def verifier_dans_le_mot(mot_devine):
     reponse = False
-    global liste_lettres
-    liste_lettres = []
     lettre=demander_lettre()
     liste_lettres.append(lettre)
     for i in range (len(mot_complet)):
@@ -113,20 +110,25 @@ def jouer_pendu(chances=6):
     fichier = fournir_mots()  # enregistrer le fichier de mots soit fourni par le joueur soit de base
     mot_initial = selectionner_mot(fichier)  # choisir un mot aléatoire parmi le fichier choisi
     global mot_complet
-    mot_complet = supprimer_accents(mot_initial)
+    mot_complet = supprimer_accents(mot_initial).lower()
     mot_devine = ["_"]*len(mot_complet)
+    global liste_lettres
+    liste_lettres = []
     afficher_chances(chances) #affiche le nombre de chances qu'il reste
     while chances > 0:
         print(mot_devine)
-        rep = verifier_dans_le_mot(mot_devine)
-        gagne=gagner_partie(mot_devine)
-        if gagne:
-            fin_de_partie()
+        rep=verifier_dans_le_mot(mot_devine)
         if not rep:
             chances-=1
+
+        if gagner_partie(mot_devine):
+            fin_de_partie()
+
         if chances==1:
             donner_bonus()
+
         afficher_chances(chances)
+
     if chances==0:
         perdu_partie()
         fin_de_partie()
