@@ -84,10 +84,11 @@ def demander_lettre():
         else:
             return lettre
 
-"""cette fonction vérifie si la lettre donnée par l'utilisateur se trouve dans le mot à deviner 
+"""Cette fonction vérifie si la lettre donnée par l'utilisateur se trouve dans le mot à deviner 
 la variable mot_devine enregistre cette lettre à son emplacement et indique au joueur qu'il a trouvé
 sinon elle indique au joueur que la lettre n'est pas dans le mot
 la fonction retourne un booléen selon si la lettre devinée était dans le mot (True) ou pas (False)
+Elle enregistre également les lettres données par le joueur pour le bonus
 """
 def verifier_dans_le_mot(mot_devine):
     reponse = False
