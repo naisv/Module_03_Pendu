@@ -9,7 +9,7 @@ import string
 
 # FONCTIONS DE CONFIGURATION -------------------------------------------------------------------------------------------
 """ Cette fonction permet au joueur de fournir son propre fichier de mots en répondant "oui" exactement (sans majuscule): 
-- le fichier doit contenir seulement des mots (pas de tabulation) et ne pas être vide
+- le fichier doit contenir seulement des mots (pas de ponctuation) et ne pas être vide
 - l'utilisateur doit donner le chemin d'accès de l'ordinateur vers ce fichier
 - les mots peuvent contenir des accents que le code triera ensuite
 Pour toute autre réponse, le code prendra le fichier de mots par défaut fourni sur Moodle """
