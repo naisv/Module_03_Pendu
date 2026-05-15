@@ -4,7 +4,7 @@ MGA802-01 ETE26
 Bienvenue dans ce Jeu du Pendu!   
 Ce script permet de jouer au jeu du pendu dans la console Python de manière interactive.
 ## Fonctionnalités
-* **Bibliothèque de mots**: le joueur peut fournir son propre fichier de mots (qui ne doit pas contenir de tabulation ni être vide) ou utiliser celui fourni par défaut
+* **Bibliothèque de mots**: le joueur peut fournir son propre fichier de mots (qui ne doit pas contenir de ponctuation ni être vide) ou utiliser celui fourni par défaut
 * **Casse et accents**: les accents sont supprimés par le code et la casse est gérée par le code pour ne pas impacter le jeu 
 * **Nombre de chances**: le joueur a 6 chances par défaut, mais peut modifier cette valeur en précisant un nombre de chances en paramètre lors de l'appel de la fonction *jouer_pendu*
 * **Bonus**: le joueur bénéficie d'un bonus lorsqu'il ne lui reste qu'une seule chance: le code lui indiquera une lettre non présente dans le mot ni dans ce qu'il a déjà deviné
